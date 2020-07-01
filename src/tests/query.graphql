@@ -1,0 +1,5 @@
+query getArtist {
+  artists(sort: TRENDING_DESC, size: 3) {
+    name
+  }
+}
