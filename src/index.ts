@@ -1,7 +1,8 @@
 import fetch from 'cross-fetch'
+import { DocumentNode, print } from 'graphql'
 
 interface IQueryOptions {
-  query: string
+  query: string | DocumentNode
   variables?: object | null
   operationName?: string
 }
@@ -47,16 +48,18 @@ class SimpleQL {
     return data
   }
 
-  private prepareBody(body: string | object): string {
-    if (typeof body === 'string') return body
-    return JSON.stringify(body)
+  private prepareBody(options: IQueryOptions): string {
+    if (typeof options.query !== 'string')
+      options.query = print(<DocumentNode>options.query)
+
+    if (typeof options === 'string') return options
+    return JSON.stringify(options)
   }
 
   private async fetch(options: RequestInit): Promise<IGraphQLResponse> {
     try {
       const res = await fetch(this.url, options)
       if (res.status >= 400) {
-        console.log(await res.text())
         throw new Error('an error happen')
       }
 
@@ -64,7 +67,7 @@ class SimpleQL {
 
       return data
     } catch (error) {
-      console.log(error)
+      throw new Error(error)
     }
   }
 }
