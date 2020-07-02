@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  
+  <img src="https://github.com/unlikelystudio/simpleql/workflows/Test/badge.svg">
 </p>
 
 <p align="center">
