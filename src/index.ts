@@ -40,17 +40,27 @@ class SimpleQL {
   }
 
   async query(options: IQueryOptions): Promise<IGraphQLResponse> {
+    this.transformOptions(options)
+
     const data = await this.fetch({
       ...this.options,
-      body: this.prepareBody(options),
     })
 
     return data
   }
 
+  private transformOptions(options: IQueryOptions) {
+    if (this.options.method.toLocaleLowerCase() === 'post') {
+      this.setBody(this.prepareBody(options))
+    } else {
+      this.setUrl(`${this.url}?${this.encodeURI(options)}`)
+    }
+
+    return options
+  }
+
   private prepareBody(options: IQueryOptions): string {
-    if (typeof options.query !== 'string')
-      options.query = print(<DocumentNode>options.query)
+    options.query = this.graphqlToString(options.query)
 
     if (typeof options === 'string') return options
     return JSON.stringify(options)
@@ -69,6 +79,38 @@ class SimpleQL {
     } catch (error) {
       throw new Error(error)
     }
+  }
+
+  private graphqlToString(query: string | DocumentNode): string {
+    if (typeof query !== 'string') return print(<DocumentNode>query)
+    return query
+  }
+
+  private setUrl(url: string): void {
+    this.url = url
+  }
+
+  private setBody(body: string): void {
+    this.options.body = body
+  }
+
+  private encodeURI(params: object): string {
+    let query = ''
+    var key: any
+    for (key in params) {
+      query += `${encodeURIComponent(key)}=${encodeURIComponent(
+        this.encodeURIType(params[key])
+      )}&`
+    }
+
+    return query
+  }
+
+  private encodeURIType(params: string | DocumentNode | any): string {
+    if (typeof params === 'string') return params
+    if (!params.kind) return JSON.stringify(params)
+
+    return this.graphqlToString(params)
   }
 }
 
