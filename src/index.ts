@@ -49,6 +49,16 @@ class SimpleQL {
     return data
   }
 
+  async mutation(options: IQueryOptions) {
+    this.transformOptions(options)
+
+    const data = await this.fetch({
+      ...this.options,
+    })
+
+    return data
+  }
+
   private transformOptions(options: IQueryOptions) {
     if (this.options.method.toLocaleLowerCase() === 'post') {
       this.setBody(this.prepareBody(options))

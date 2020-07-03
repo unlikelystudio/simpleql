@@ -70,4 +70,24 @@ describe('SimpleQL', () => {
     expect(query.data).not.toBeNull()
     expect(query).not.toBeNull()
   })
+
+  it('sould return an error but make a right mutation', async () => {
+    const client = new SimpleQL('https://metaphysics-production.artsy.net')
+
+    const query = await client.mutation({
+      query: gql`
+        mutation {
+          saveArtwork(input: { artwork_id: "1" }) {
+            artwork {
+              id
+            }
+          }
+        }
+      `,
+      variables: {},
+    })
+
+    expect(query.errors).not.toBeNull()
+    expect(query).not.toBeNull()
+  })
 })
