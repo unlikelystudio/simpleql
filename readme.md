@@ -4,6 +4,7 @@
 
 <p align="center">
   <img src="https://github.com/unlikelystudio/simpleql/workflows/Test/badge.svg">
+  <img src="https://badge.fury.io/js/%40unlikelystudio%2Fsimpleql.svg" alt="npm version" height="18">
 </p>
 
 <p align="center">
