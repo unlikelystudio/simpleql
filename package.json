@@ -1,7 +1,9 @@
 {
   "name": "@unlikelystudio/simpleql",
   "version": "1.0.1",
-  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "source": "src/index.ts",
+  "module": "dist/index.js",
   "description": "Minimal graphql client",
   "files": [
     "dist"
@@ -13,10 +15,13 @@
   ],
   "homepage": "https://github.com/unlikelystudio/simpleql",
   "scripts": {
-    "build": "parcel build src/index.ts",
-    "start": "parcel serve src/index.ts",
+    "build": "rollup -c",
+    "start": "rollup",
     "test": "jest ./src",
-    "prepublish": "parcel build src/index.ts"
+    "prepublish": "npm run build"
+  },
+  "peerDependencies": {
+    "graphql": "^15.2.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.3",
@@ -25,9 +30,11 @@
     "graphql-tag": "^2.10.3",
     "jest": "^26.1.0",
     "jest-transform-graphql": "^2.1.0",
-    "parcel": "^2.0.0-beta.1",
     "prettier": "^2.0.5",
+    "rollup": "^2.19.0",
+    "rollup-plugin-typescript2": "^0.27.1",
     "ts-jest": "^26.1.1",
+    "tslib": "^2.0.0",
     "typescript": "^3.9.5"
   },
   "dependencies": {

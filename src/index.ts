@@ -7,7 +7,7 @@ interface IQueryOptions {
   operationName?: string
 }
 
-export interface IGraphQLError {
+interface IGraphQLError {
   message: string
   locations: { line: number; column: number }[]
   path: string[]
@@ -125,3 +125,5 @@ class SimpleQL {
 }
 
 export default SimpleQL
+
+export { IQueryOptions, IGraphQLError, IGraphQLResponse }

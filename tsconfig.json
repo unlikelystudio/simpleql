@@ -2,14 +2,16 @@
   "compilerOptions": {
     "allowJs": true,
     "esModuleInterop": true,
-    "lib": ["dom", "es2017"],
-    "module": "commonjs",
+    "lib": ["dom", "es2018"],
+    "module": "esnext",
     "moduleResolution": "node",
-    "target": "es6",
+    "target": "esnext",
     "baseUrl": "./src",
-    "declaration": true
+    "declaration": true,
+    "types": ["graphql", "jest", "node"],
+    "declarationDir": "./dist"
   },
   "files": ["graphql.d.ts"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "src/tests"],
   "include": ["src/**/*.ts"]
 }
