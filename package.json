@@ -2,6 +2,13 @@
   "name": "@unlikelystudio/simpleql",
   "version": "1.0.0",
   "main": "dist/index.js",
+  "description": "Minimal graphql client",
+  "keywords": [
+    "graphql",
+    "fetch",
+    "graphql-client"
+  ],
+  "homepage": "https://github.com/unlikelystudio/simpleql",
   "scripts": {
     "build": "parcel build src/index.ts",
     "start": "parcel serve src/index.ts",
