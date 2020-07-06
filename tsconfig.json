@@ -6,7 +6,8 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "target": "es6",
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "declaration": true
   },
   "files": ["graphql.d.ts"],
   "exclude": ["node_modules"],

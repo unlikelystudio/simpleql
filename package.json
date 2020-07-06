@@ -1,11 +1,12 @@
 {
-  "name": "simple-ql",
+  "name": "@unlikely/simpleql",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "parcel build src/index.ts",
     "start": "parcel serve src/index.ts",
-    "test": "jest ./src"
+    "test": "jest ./src",
+    "prepublish": "parcel build src/index.ts"
   },
   "devDependencies": {
     "@types/jest": "^26.0.3",
