@@ -8,6 +8,9 @@
   "files": [
     "dist"
   ],
+  "engines": {
+    "node": "10.x || 12.x || 14.x"
+  },
   "keywords": [
     "graphql",
     "fetch",
@@ -15,8 +18,8 @@
   ],
   "homepage": "https://github.com/unlikelystudio/simpleql",
   "scripts": {
-    "build": "rollup -c",
-    "start": "rollup",
+    "clean": "rimraf ./dist",
+    "build": "npm run clean && tsc -d",
     "test": "jest ./src",
     "prepublish": "npm run build"
   },
@@ -31,6 +34,7 @@
     "jest": "^26.1.0",
     "jest-transform-graphql": "^2.1.0",
     "prettier": "^2.0.5",
+    "rimraf": "^3.0.2",
     "rollup": "^2.19.0",
     "rollup-plugin-typescript2": "^0.27.1",
     "ts-jest": "^26.1.1",

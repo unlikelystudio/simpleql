@@ -80,6 +80,7 @@ class SimpleQL {
     try {
       const res = await fetch(this.url, options)
       if (res.status >= 400) {
+        console.log(await res.text())
         throw new Error('an error happen')
       }
 

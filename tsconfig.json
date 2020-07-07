@@ -1,17 +1,18 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "esModuleInterop": true,
-    "lib": ["dom", "es2018"],
-    "module": "esnext",
-    "moduleResolution": "node",
-    "target": "esnext",
     "baseUrl": "./src",
     "declaration": true,
-    "types": ["graphql", "jest", "node"],
-    "declarationDir": "./dist"
+    "declarationDir": "./dist",
+    "esModuleInterop": true,
+    "lib": ["dom", "es2018"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "target": "es2018",
+    "types": ["graphql", "jest", "node"]
   },
-  "files": ["graphql.d.ts"],
   "exclude": ["node_modules", "src/tests"],
+  "files": ["graphql.d.ts"],
   "include": ["src/**/*.ts"]
 }
