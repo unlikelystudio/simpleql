@@ -7,7 +7,7 @@ interface IQueryOptions {
   operationName?: string
 }
 
-export interface IGraphQLError {
+interface IGraphQLError {
   message: string
   locations: { line: number; column: number }[]
   path: string[]
@@ -80,6 +80,7 @@ class SimpleQL {
     try {
       const res = await fetch(this.url, options)
       if (res.status >= 400) {
+        console.log(await res.text())
         throw new Error('an error happen')
       }
 
@@ -125,3 +126,5 @@ class SimpleQL {
 }
 
 export default SimpleQL
+
+export { IQueryOptions, IGraphQLError, IGraphQLResponse }
