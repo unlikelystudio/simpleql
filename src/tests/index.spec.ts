@@ -1,7 +1,6 @@
 import SimpleQL from '../index'
 import { getArtist } from './query.graphql'
 import gql from 'graphql-tag'
-import { util } from 'prettier'
 
 describe('SimpleQL', () => {
   it('should return correctly datatree', async () => {
