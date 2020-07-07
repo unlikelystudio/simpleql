@@ -22,11 +22,25 @@ interface IGraphQLResponse {
   [key: string]: any
 }
 
+interface DynamicHeaderValue {
+  (): string | DynamicHeaderValue
+}
+
+interface DynamicHeaders {
+  [key: string]: string | DynamicHeaderValue
+}
+
+type ISimpleQLHeaders = HeadersInit | DynamicHeaders
+
+interface IRequestInit extends Omit<RequestInit, 'headers'> {
+  headers?: ISimpleQLHeaders
+}
+
 class SimpleQL {
   private url: string
-  private options: RequestInit
+  private options: IRequestInit
 
-  constructor(url: string, options?: RequestInit) {
+  constructor(url: string, options?: IRequestInit) {
     this.url = url
     this.options = {
       method: 'POST',
@@ -59,6 +73,20 @@ class SimpleQL {
     return data
   }
 
+  /**
+   * Thanks @budry for your PR https://github.com/prisma-labs/graphql-request/pull/91
+   */
+  private async processHeaders(
+    headers: ISimpleQLHeaders
+  ): Promise<HeadersInit> {
+    for (let name in headers) {
+      if (typeof headers[name] === 'function') {
+        headers[name] = await (headers[name] as DynamicHeaderValue)()
+      }
+    }
+    return headers as HeadersInit
+  }
+
   private transformOptions(options: IQueryOptions) {
     if (this.options.method.toLocaleLowerCase() === 'post') {
       this.setBody(this.prepareBody(options))
@@ -76,12 +104,17 @@ class SimpleQL {
     return JSON.stringify(options)
   }
 
-  private async fetch(options: RequestInit): Promise<IGraphQLResponse> {
+  private async fetch(options: IRequestInit): Promise<IGraphQLResponse> {
     try {
-      const res = await fetch(this.url, options)
+      const headers = await this.processHeaders(this.options.headers)
+
+      const res = await fetch(this.url, {
+        ...options,
+        headers,
+      })
       if (res.status >= 400) {
-        console.log(await res.text())
-        throw new Error('an error happen')
+        const error = await res.text()
+        throw new Error(error)
       }
 
       const data = await res.json()
