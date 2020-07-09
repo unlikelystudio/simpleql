@@ -22,6 +22,7 @@ describe('SimpleQL', () => {
       query: `query getArtist {
         artists(sort: TRENDING_DESC, size: 3) {
           name
+          bio
         }
       }
       `,
@@ -40,6 +41,7 @@ describe('SimpleQL', () => {
         query getArtist {
           artists(sort: TRENDING_DESC, size: 3) {
             name
+            bio
           }
         }
       `,
@@ -60,6 +62,7 @@ describe('SimpleQL', () => {
         query getArtist {
           artists(sort: TRENDING_DESC, size: 3) {
             name
+            bio
           }
         }
       `,

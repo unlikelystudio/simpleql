@@ -126,8 +126,26 @@ class SimpleQL {
   }
 
   private graphqlToString(query: string | DocumentNode): string {
-    if (typeof query !== 'string') return print(<DocumentNode>query)
+    if (typeof query !== 'string')
+      return this.stripQueryString(print(<DocumentNode>query))
+    return this.stripQueryString(query)
+  }
+
+  /**
+   * https://github.com/bwlt/gatsby-source-prismic-graphql/blob/8fcec72add1b3d4606ec8be27e51cce4a8f81156/packages/gatsby-source-prismic-graphql/src/utils/index.ts#L44-L53
+   * @param query
+   */
+  private stripQueryString(query: string): string {
     return query
+      .replace(/\#.*\n/g, '')
+      .replace(/\s+/g, ' ')
+      .replace(/\s?\{\s?/g, '{')
+      .replace(/\s?\}\s?/g, '}')
+      .replace(/\s?\:\s?/g, ':')
+      .replace(/\s?\(\s?/g, '(')
+      .replace(/\s?\)\s?/g, ')')
+      .replace(/\.\.\.\s/g, '...')
+      .replace(/\,\s/g, ',')
   }
 
   private setUrl(url: string): void {
