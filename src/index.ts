@@ -71,16 +71,19 @@ class SimpleQL {
 
   /**
    * Thanks @budry for your PR https://github.com/prisma-labs/graphql-request/pull/91
+   * Not the right solution
    */
   private async processHeaders(
     headers: ISimpleQLHeaders
   ): Promise<HeadersInit> {
+    const h: ISimpleQLHeaders = { ...headers }
     for (let name in headers) {
       if (typeof headers[name] === 'function') {
-        headers[name] = await (headers[name] as DynamicHeaderValue)()
+        h[name] = await (headers[name] as DynamicHeaderValue)()
       }
     }
-    return headers as HeadersInit
+
+    return h as HeadersInit
   }
 
   private prepareBody(options: IQueryOptions): string {
