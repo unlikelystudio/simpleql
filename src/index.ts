@@ -54,9 +54,7 @@ class SimpleQL {
   }
 
   async query(options: IQueryOptions): Promise<IGraphQLResponse> {
-    this.transformOptions(options)
-
-    const data = await this.fetch({
+    const data = await this.fetch(options, {
       ...this.options,
     })
 
@@ -64,9 +62,7 @@ class SimpleQL {
   }
 
   async mutation(options: IQueryOptions) {
-    this.transformOptions(options)
-
-    const data = await this.fetch({
+    const data = await this.fetch(options, {
       ...this.options,
     })
 
@@ -87,16 +83,6 @@ class SimpleQL {
     return headers as HeadersInit
   }
 
-  private transformOptions(options: IQueryOptions) {
-    if (this.options.method.toLocaleLowerCase() === 'post') {
-      this.setBody(this.prepareBody(options))
-    } else {
-      this.setUrl(`${this.url}?${this.encodeURI(options)}`)
-    }
-
-    return options
-  }
-
   private prepareBody(options: IQueryOptions): string {
     options.query = this.graphqlToString(options.query)
 
@@ -104,14 +90,22 @@ class SimpleQL {
     return JSON.stringify(options)
   }
 
-  private async fetch(options: IRequestInit): Promise<IGraphQLResponse> {
+  private async fetch(ctx, options: IRequestInit): Promise<IGraphQLResponse> {
     try {
       const headers = await this.processHeaders(this.options.headers)
 
-      const res = await fetch(this.url, {
-        ...options,
-        headers,
-      })
+      const res = await fetch(
+        this.options.method.toLocaleLowerCase() === 'get'
+          ? `${this.url}?${this.encodeURI(ctx)}`
+          : this.url,
+        {
+          ...options,
+          ...(this.options.method.toLocaleLowerCase() === 'post'
+            ? { body: this.prepareBody(ctx) }
+            : {}),
+          headers,
+        }
+      )
       if (res.status >= 400) {
         const error = await res.text()
         throw new Error(error)
@@ -128,14 +122,6 @@ class SimpleQL {
   private graphqlToString(query: string | DocumentNode): string {
     if (typeof query !== 'string') return print(<DocumentNode>query)
     return query
-  }
-
-  private setUrl(url: string): void {
-    this.url = url
-  }
-
-  private setBody(body: string): void {
-    this.options.body = body
   }
 
   private encodeURI(params: object): string {
