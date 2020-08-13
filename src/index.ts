@@ -54,9 +54,7 @@ class SimpleQL {
   }
 
   async query(options: IQueryOptions): Promise<IGraphQLResponse> {
-    this.transformOptions(options)
-
-    const data = await this.fetch({
+    const data = await this.fetch(options, {
       ...this.options,
     })
 
@@ -64,9 +62,7 @@ class SimpleQL {
   }
 
   async mutation(options: IQueryOptions) {
-    this.transformOptions(options)
-
-    const data = await this.fetch({
+    const data = await this.fetch(options, {
       ...this.options,
     })
 
@@ -75,26 +71,19 @@ class SimpleQL {
 
   /**
    * Thanks @budry for your PR https://github.com/prisma-labs/graphql-request/pull/91
+   * Not the right solution
    */
   private async processHeaders(
     headers: ISimpleQLHeaders
   ): Promise<HeadersInit> {
+    const h: ISimpleQLHeaders = { ...headers }
     for (let name in headers) {
       if (typeof headers[name] === 'function') {
-        headers[name] = await (headers[name] as DynamicHeaderValue)()
+        h[name] = await (headers[name] as DynamicHeaderValue)()
       }
     }
-    return headers as HeadersInit
-  }
 
-  private transformOptions(options: IQueryOptions) {
-    if (this.options.method.toLocaleLowerCase() === 'post') {
-      this.setBody(this.prepareBody(options))
-    } else {
-      this.setUrl(`${this.url}?${this.encodeURI(options)}`)
-    }
-
-    return options
+    return h as HeadersInit
   }
 
   private prepareBody(options: IQueryOptions): string {
@@ -104,14 +93,22 @@ class SimpleQL {
     return JSON.stringify(options)
   }
 
-  private async fetch(options: IRequestInit): Promise<IGraphQLResponse> {
+  private async fetch(ctx, options: IRequestInit): Promise<IGraphQLResponse> {
     try {
       const headers = await this.processHeaders(this.options.headers)
 
-      const res = await fetch(this.url, {
-        ...options,
-        headers,
-      })
+      const res = await fetch(
+        this.options.method.toLocaleLowerCase() === 'get'
+          ? `${this.url}?${this.encodeURI(ctx)}`
+          : this.url,
+        {
+          ...options,
+          ...(this.options.method.toLocaleLowerCase() === 'post'
+            ? { body: this.prepareBody(ctx) }
+            : {}),
+          headers,
+        }
+      )
       if (res.status >= 400) {
         const error = await res.text()
         throw new Error(error)
@@ -146,14 +143,6 @@ class SimpleQL {
       .replace(/\s?\)\s?/g, ')')
       .replace(/\.\.\.\s/g, '...')
       .replace(/\,\s/g, ',')
-  }
-
-  private setUrl(url: string): void {
-    this.url = url
-  }
-
-  private setBody(body: string): void {
-    this.options.body = body
   }
 
   private encodeURI(params: object): string {

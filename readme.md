@@ -18,7 +18,7 @@ _Inspired by [graphql-request](https://github.com/prisma-labs/graphql-request) b
 
 ```bash
 
-npm i simpleql
+npm i @unlikelystudio/simpleql
 
 ```
 
