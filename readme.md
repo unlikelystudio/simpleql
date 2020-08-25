@@ -18,17 +18,15 @@ _Inspired by [graphql-request](https://github.com/prisma-labs/graphql-request) b
 
 ```bash
 
-npm i simpleql
+npm i @unlikelystudio/simpleql
 
 ```
 
 ```typescript
-import SimpleQL from 'simpleql'
+import SimpleQL from '@unlikelystudio/simpleql'
 import gql from 'graphql-tag'
 
-const client = new SimpleQL({
-  url: 'https://api.unlikely.studio',
-})
+const client = new SimpleQL('https://api.unlikely.studio')
 
 const query = `
   query Projects {
