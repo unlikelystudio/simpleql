@@ -22,6 +22,7 @@
     "clean": "rimraf ./dist",
     "build": "npm run clean && tsc -d",
     "test": "jest ./src",
+    "test:watch": "jest ./src --watch",
     "prepublish": "npm run build"
   },
   "peerDependencies": {

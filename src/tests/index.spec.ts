@@ -1,25 +1,6 @@
 import SimpleQL from '../index'
 import { getArtist } from './query.graphql'
-import fetchMock from 'fetch-mock'
 import gql from 'graphql-tag'
-
-async function mock(response: any, testFn: () => Promise<void>) {
-  fetchMock.mock({
-    method: 'post',
-    matcher: '*',
-    response: {
-      headers: {
-        'Content-Type': 'application/json',
-        ...response.headers,
-      },
-      body: JSON.stringify(response.body),
-    },
-  })
-
-  await testFn()
-
-  fetchMock.restore()
-}
 
 describe('SimpleQL', () => {
   it('should return correctly datatree', async () => {
@@ -110,31 +91,5 @@ describe('SimpleQL', () => {
 
     expect(query.errors).not.toBeNull()
     expect(query).not.toBeNull()
-  })
-  it('sould test headers', async (e) => {
-    const client = new SimpleQL('https://mock-api.com/graphql', {
-      headers: {
-        Authorization: () => {
-          return Date.toString()
-        },
-      },
-    })
-
-    await mock(
-      {
-        body: { data: { test: 'test' } },
-      },
-      async () => {
-        await client.query({
-          query: gql`
-            query {
-              test
-            }
-          `,
-          variables: {},
-        })
-        console.log(fetchMock.lastCall()[1].headers!['Authorization'])
-      }
-    )
   })
 })
