@@ -5,6 +5,9 @@ interface IQueryOptions {
   query: string | DocumentNode
   variables?: object | null
   operationName?: string
+  fetch?: {
+    headers?: ISimpleQLHeaders
+  }
 }
 
 interface IGraphQLError {
@@ -56,6 +59,10 @@ class SimpleQL {
   async query(options: IQueryOptions): Promise<IGraphQLResponse> {
     const data = await this.fetch(options, {
       ...this.options,
+      headers: {
+        ...this.options.headers,
+        ...options?.fetch?.headers,
+      },
     })
 
     return data
@@ -64,6 +71,10 @@ class SimpleQL {
   async mutation(options: IQueryOptions) {
     const data = await this.fetch(options, {
       ...this.options,
+      headers: {
+        ...this.options.headers,
+        ...options?.fetch?.headers,
+      },
     })
 
     return data
