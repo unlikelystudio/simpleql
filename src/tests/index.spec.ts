@@ -6,7 +6,7 @@ describe('SimpleQL', () => {
   it('should return correctly datatree', async () => {
     const client = new SimpleQL('https://metaphysics-production.artsy.net')
 
-    const query = await client.query<any>({
+    const query = await client.query({
       query: getArtist.loc.source.body,
       variables: {},
     })
@@ -18,7 +18,7 @@ describe('SimpleQL', () => {
   it('sould return correctly datatree with string query', async () => {
     const client = new SimpleQL('https://metaphysics-production.artsy.net')
 
-    const query = await client.query<any>({
+    const query = await client.query({
       query: `query getArtist {
         artists(sort: TRENDING_DESC, size: 3) {
           name
@@ -36,7 +36,7 @@ describe('SimpleQL', () => {
   it('sould return correctly datatree with gql query', async () => {
     const client = new SimpleQL('https://metaphysics-production.artsy.net')
 
-    const query = await client.query<any>({
+    const query = await client.query({
       query: gql`
         query getArtist {
           artists(sort: TRENDING_DESC, size: 3) {
@@ -57,7 +57,7 @@ describe('SimpleQL', () => {
       method: 'get',
     })
 
-    const query = await client.query<any>({
+    const query = await client.query({
       query: gql`
         query getArtist {
           artists(sort: TRENDING_DESC, size: 3) {
