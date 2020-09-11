@@ -54,7 +54,7 @@ class SimpleQL {
   }
 
   async query<T>(options: IQueryOptions): Promise<IGraphQLResponse<T>> {
-    const data = await this.fetch(options, {
+    const data = await this.fetch<T>(options, {
       ...this.options,
     })
 
@@ -93,7 +93,10 @@ class SimpleQL {
     return JSON.stringify(options)
   }
 
-  private async fetch(ctx, options: IRequestInit): Promise<IGraphQLResponse> {
+  private async fetch<T>(
+    ctx,
+    options: IRequestInit
+  ): Promise<IGraphQLResponse<T>> {
     try {
       const headers = await this.processHeaders(this.options.headers)
 
