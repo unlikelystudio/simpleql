@@ -70,3 +70,17 @@ const query = await client.query({
   query,
 })
 ```
+
+### Typescript users
+
+You can add types to your query response.
+
+```typescript
+interface Person {
+  name: string
+}
+
+const query = await client.query<Person>({
+  query,
+})
+```
