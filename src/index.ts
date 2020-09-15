@@ -17,8 +17,8 @@ interface IGraphQLError {
   [key: string]: any
 }
 
-interface IGraphQLResponse {
-  data?: any
+interface IGraphQLResponse<T> {
+  data?: T
   errors?: IGraphQLError[]
   extensions?: any
   status: number
@@ -60,8 +60,8 @@ class SimpleQL {
     }
   }
 
-  async query(options: IQueryOptions): Promise<IGraphQLResponse> {
-    const data = await this.fetch(options, {
+  async query<T>(options: IQueryOptions): Promise<IGraphQLResponse<T>> {
+    const data = await this.fetch<T>(options, {
       ...this.options,
       headers: {
         ...this.options.headers,
@@ -113,7 +113,10 @@ class SimpleQL {
     return JSON.stringify(options)
   }
 
-  private async fetch(ctx: object | IQueryOptions, options: IRequestInit): Promise<IGraphQLResponse> {
+  private async fetch<T>(
+    ctx: object | IQueryOptions,
+    options: IRequestInit
+  ): Promise<IGraphQLResponse<T>> {
     try {
       const headers = await this.processHeaders(this.options.headers)
 
