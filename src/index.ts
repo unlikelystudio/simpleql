@@ -33,6 +33,10 @@ interface DynamicHeaders {
   [key: string]: string | DynamicHeaderValue
 }
 
+interface ObjectParams {
+  [key: string]: any
+}
+
 type ISimpleQLHeaders = HeadersInit | DynamicHeaders
 
 interface IRequestInit extends Omit<RequestInit, 'headers'> {
@@ -87,10 +91,15 @@ class SimpleQL {
   private async processHeaders(
     headers: ISimpleQLHeaders
   ): Promise<HeadersInit> {
-    const h: ISimpleQLHeaders = { ...headers }
-    for (let name in headers) {
-      if (typeof headers[name] === 'function') {
-        h[name] = await (headers[name] as DynamicHeaderValue)()
+    const h: ISimpleQLHeaders = { ...headers } as DynamicHeaders
+    const keys = Object.keys(headers)
+    const dynamicHeaders = headers as DynamicHeaders
+
+    if (keys.length > 0 && keys.filter(String).length === keys.length) {
+      for (let name in headers) {
+        if (typeof dynamicHeaders[name] === 'function') {
+          h[name] = await (dynamicHeaders[name] as DynamicHeaderValue)()
+        }
       }
     }
 
@@ -104,7 +113,7 @@ class SimpleQL {
     return JSON.stringify(options)
   }
 
-  private async fetch(ctx, options: IRequestInit): Promise<IGraphQLResponse> {
+  private async fetch(ctx: object | IQueryOptions, options: IRequestInit): Promise<IGraphQLResponse> {
     try {
       const headers = await this.processHeaders(this.options.headers)
 
@@ -115,7 +124,7 @@ class SimpleQL {
         {
           ...options,
           ...(this.options.method.toLocaleLowerCase() === 'post'
-            ? { body: this.prepareBody(ctx) }
+            ? { body: this.prepareBody(ctx as IQueryOptions) }
             : {}),
           headers,
         }
@@ -156,7 +165,7 @@ class SimpleQL {
       .replace(/\,\s/g, ',')
   }
 
-  private encodeURI(params: object): string {
+  private encodeURI(params: ObjectParams): string {
     let query = ''
     var key: any
     for (key in params) {
@@ -168,7 +177,7 @@ class SimpleQL {
     return query
   }
 
-  private encodeURIType(params: string | DocumentNode | any): string {
+  private encodeURIType(params: string | DocumentNode): string {
     if (typeof params === 'string') return params
     if (!params.kind) return JSON.stringify(params)
 
@@ -178,4 +187,4 @@ class SimpleQL {
 
 export default SimpleQL
 
-export { IQueryOptions, IGraphQLError, IGraphQLResponse }
+export type { IQueryOptions, IGraphQLError, IGraphQLResponse }
