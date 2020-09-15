@@ -5,6 +5,9 @@ interface IQueryOptions {
   query: string | DocumentNode
   variables?: object | null
   operationName?: string
+  fetch?: {
+    headers?: ISimpleQLHeaders
+  }
 }
 
 interface IGraphQLError {
@@ -28,6 +31,10 @@ interface DynamicHeaderValue {
 
 interface DynamicHeaders {
   [key: string]: string | DynamicHeaderValue
+}
+
+interface ObjectParams {
+  [key: string]: any
 }
 
 type ISimpleQLHeaders = HeadersInit | DynamicHeaders
@@ -56,6 +63,10 @@ class SimpleQL {
   async query<T>(options: IQueryOptions): Promise<IGraphQLResponse<T>> {
     const data = await this.fetch<T>(options, {
       ...this.options,
+      headers: {
+        ...this.options.headers,
+        ...options?.fetch?.headers,
+      },
     })
 
     return data
@@ -64,6 +75,10 @@ class SimpleQL {
   async mutation(options: IQueryOptions) {
     const data = await this.fetch(options, {
       ...this.options,
+      headers: {
+        ...this.options.headers,
+        ...options?.fetch?.headers,
+      },
     })
 
     return data
@@ -76,10 +91,15 @@ class SimpleQL {
   private async processHeaders(
     headers: ISimpleQLHeaders
   ): Promise<HeadersInit> {
-    const h: ISimpleQLHeaders = { ...headers }
-    for (let name in headers) {
-      if (typeof headers[name] === 'function') {
-        h[name] = await (headers[name] as DynamicHeaderValue)()
+    const h: ISimpleQLHeaders = { ...headers } as DynamicHeaders
+    const keys = Object.keys(headers)
+    const dynamicHeaders = headers as DynamicHeaders
+
+    if (keys.length > 0 && keys.filter(String).length === keys.length) {
+      for (let name in headers) {
+        if (typeof dynamicHeaders[name] === 'function') {
+          h[name] = await (dynamicHeaders[name] as DynamicHeaderValue)()
+        }
       }
     }
 
@@ -94,7 +114,7 @@ class SimpleQL {
   }
 
   private async fetch<T>(
-    ctx,
+    ctx: object | IQueryOptions,
     options: IRequestInit
   ): Promise<IGraphQLResponse<T>> {
     try {
@@ -107,7 +127,7 @@ class SimpleQL {
         {
           ...options,
           ...(this.options.method.toLocaleLowerCase() === 'post'
-            ? { body: this.prepareBody(ctx) }
+            ? { body: this.prepareBody(ctx as IQueryOptions) }
             : {}),
           headers,
         }
@@ -148,7 +168,7 @@ class SimpleQL {
       .replace(/\,\s/g, ',')
   }
 
-  private encodeURI(params: object): string {
+  private encodeURI(params: ObjectParams): string {
     let query = ''
     var key: any
     for (key in params) {
@@ -160,7 +180,7 @@ class SimpleQL {
     return query
   }
 
-  private encodeURIType(params: string | DocumentNode | any): string {
+  private encodeURIType(params: string | DocumentNode): string {
     if (typeof params === 'string') return params
     if (!params.kind) return JSON.stringify(params)
 
@@ -170,4 +190,4 @@ class SimpleQL {
 
 export default SimpleQL
 
-export { IQueryOptions, IGraphQLError, IGraphQLResponse }
+export type { IQueryOptions, IGraphQLError, IGraphQLResponse }
