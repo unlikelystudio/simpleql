@@ -621,6 +621,11 @@
   resolved "https://registry.yarnpkg.com/@unlikelystudio/bases-prettier/-/bases-prettier-1.3.0.tgz#733c7e8a2693f5aca775fa14d0fb398193db6f34"
   integrity sha512-91Qp2PESCRmEhp3njcDVzZLrfW9GVWM3n8aCZ8iU7i5xpYOFfEQhIhrcM4QiD3Vj6gn7+KVDDqgWsRfFdyk9ew==
 
+"@unlikelystudio/bases-typescript@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@unlikelystudio/bases-typescript/-/bases-typescript-1.3.1.tgz#68e1be8dfedaae3f0a7960df78f278c99e0fc8ae"
+  integrity sha512-E8gVuG8RlviKNCLFp79MwvvPvI5mdJhLwWe7FFW8R6SGVclSkDUPt49v1Ua20NeNQDh+X9ZZSY30K15ksyuNgw==
+
 abab@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.3.tgz#623e2075e02eb2d3f2475e49f99c91846467907a"
