@@ -6,7 +6,10 @@
     "declaration": true,
     "declarationDir": "./dist",
     "outDir": "./dist",
-    "types": ["graphql", "jest", "node"]
+    "types": ["graphql", "jest", "node"],
+    "lib": ["ES2019"],
+    "module": "commonjs",
+    "target": "ES2019"
   },
 
   "exclude": ["node_modules", "src/tests"],
