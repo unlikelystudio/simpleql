@@ -7,7 +7,7 @@
     "declarationDir": "./dist",
     "outDir": "./dist",
     "types": ["graphql", "jest", "node"],
-    "lib": ["ES2019"],
+    "lib": ["ES2019", "DOM"],
     "module": "commonjs",
     "target": "ES2019"
   },
