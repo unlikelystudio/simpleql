@@ -89,13 +89,13 @@ class SimpleQL {
    * Not the right solution
    */
   private async processHeaders(
-    headers: ISimpleQLHeaders,
+    headers: ISimpleQLHeaders
   ): Promise<HeadersInit> {
     const h: ISimpleQLHeaders = { ...headers } as DynamicHeaders
     const keys = Object.keys(headers)
     const dynamicHeaders = headers as DynamicHeaders
 
-    if (keys.length > 0 && keys.filter(String).length === keys.length) {
+    if (keys.length > 0 && keys.filter(String).length === keys.length) {
       for (let name in headers) {
         if (typeof dynamicHeaders[name] === 'function') {
           h[name] = await (dynamicHeaders[name] as DynamicHeaderValue)()
@@ -115,13 +115,10 @@ class SimpleQL {
 
   private async fetch<T>(
     ctx: object | IQueryOptions,
-    options: IRequestInit,
+    options: IRequestInit
   ): Promise<IGraphQLResponse<T>> {
     try {
-      const headers = await this.processHeaders({
-        ...this.options.headers,
-        ...options.headers,
-      })
+      const headers = await this.processHeaders(this.options.headers)
 
       const res = await fetch(
         this.options.method.toLocaleLowerCase() === 'get'
@@ -133,7 +130,7 @@ class SimpleQL {
             ? { body: this.prepareBody(ctx as IQueryOptions) }
             : {}),
           headers,
-        },
+        }
       )
       if (res.status >= 400) {
         const error = await res.text()
@@ -176,7 +173,7 @@ class SimpleQL {
     var key: any
     for (key in params) {
       query += `${encodeURIComponent(key)}=${encodeURIComponent(
-        this.encodeURIType(params[key]),
+        this.encodeURIType(params[key])
       )}&`
     }
 
