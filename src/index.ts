@@ -1,7 +1,9 @@
 import fetch from 'cross-fetch'
+import { DocumentNode } from 'graphql/language/ast'
+import { print } from 'graphql'
 
 interface IQueryOptions {
-  query: string
+  query: string | DocumentNode
   variables?: object | null
   operationName?: string
   fetch?: {
@@ -144,7 +146,9 @@ class SimpleQL {
     }
   }
 
-  private graphqlToString(query: string): string {
+  private graphqlToString(query: string | DocumentNode): string {
+    if (typeof query !== 'string')
+      return this.stripQueryString(print(<DocumentNode>query))
     return this.stripQueryString(query)
   }
 
@@ -177,8 +181,9 @@ class SimpleQL {
     return query
   }
 
-  private encodeURIType(params: string): string {
+  private encodeURIType(params: string | DocumentNode): string {
     if (typeof params === 'string') return params
+    if (!params.kind) return JSON.stringify(params)
 
     return this.graphqlToString(params)
   }
