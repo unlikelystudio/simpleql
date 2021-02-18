@@ -1,10 +1,10 @@
 {
   "name": "@unlikelystudio/simpleql",
-  "version": "1.4.0-beta.2",
+  "version": "1.4.0-beta.3",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "main": "dist/index.js",
-  "module": "dist/index.js",
+  "module": "dist/index.es.js",
   "description": "Minimal graphql client",
   "files": [
     "dist"
