@@ -1,4 +1,3 @@
-import fetch from 'cross-fetch'
 import { DocumentNode } from 'graphql/language/ast'
 import { print } from 'graphql'
 
