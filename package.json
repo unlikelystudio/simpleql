@@ -1,10 +1,10 @@
 {
   "name": "@unlikelystudio/simpleql",
-  "version": "1.3.0-beta.0",
+  "version": "1.4.0-beta.5",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "main": "dist/index.js",
-  "module": "dist/index.js",
+  "module": "dist/index.es.js",
   "description": "Minimal graphql client",
   "files": [
     "dist"
@@ -24,13 +24,13 @@
   "homepage": "https://github.com/unlikelystudio/simpleql",
   "scripts": {
     "clean": "rimraf ./dist",
-    "build": "npm run clean && tsc -d",
+    "build": "npm run clean && rollup -c",
     "test": "jest ./src",
     "test:watch": "jest ./src --watch",
     "prepublish": "npm run build"
   },
   "peerDependencies": {
-    "graphql": "^15.3.0"
+    "graphql": "^14.0.0 || ^15.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.13",
@@ -38,17 +38,17 @@
     "@unlikelystudio/bases-prettier": "^1.3.0",
     "@unlikelystudio/bases-typescript": "^1.3.1",
     "fetch-mock": "^9.10.7",
-    "graphql-tag": "^2.11.0",
     "graphql": "^15.3.0",
-    "jest-transform-graphql": "^2.1.0",
+    "graphql-tag": "^2.11.0",
     "jest": "^26.4.2",
+    "jest-transform-graphql": "^2.1.0",
     "prettier": "^2.1.1",
     "rimraf": "^3.0.2",
+    "rollup": "^2.39.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.29.0",
     "ts-jest": "^26.3.0",
     "tslib": "^2.0.1",
     "typescript": "^4.0.2"
-  },
-  "dependencies": {
-    "cross-fetch": "^3.0.6"
   }
 }
