@@ -118,7 +118,10 @@ class SimpleQL {
     options: IRequestInit,
   ): Promise<IGraphQLResponse<T>> {
     try {
-      const headers = await this.processHeaders(this.options.headers)
+      const headers = await this.processHeaders({
+        ...this.options.headers,
+        ...options.headers,
+      })
 
       const res = await fetch(
         this.options.method.toLocaleLowerCase() === 'get'
