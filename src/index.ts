@@ -132,6 +132,7 @@ class SimpleQL {
           headers,
         },
       )
+
       if (res.status >= 400) {
         const error = await res.text()
         throw new Error(error)

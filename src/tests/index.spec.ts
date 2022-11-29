@@ -5,7 +5,7 @@ import gql from 'graphql-tag'
 
 describe('SimpleQL', () => {
   it('should return correctly datatree', async () => {
-    const client = new SimpleQL('https://metaphysics-production.artsy.net')
+    const client = new SimpleQL('https://metaphysics-production.artsy.net/v2')
 
     const query = await client.query({
       query: getArtist.loc.source.body,
@@ -17,7 +17,7 @@ describe('SimpleQL', () => {
   })
 
   it('should return correctly datatree with string query', async () => {
-    const client = new SimpleQL('https://metaphysics-production.artsy.net')
+    const client = new SimpleQL('https://metaphysics-production.artsy.net/v2')
 
     const query = await client.query({
       query: `query getArtist {
@@ -35,7 +35,7 @@ describe('SimpleQL', () => {
   })
 
   it('should return correctly datatree with gql query', async () => {
-    const client = new SimpleQL('https://metaphysics-production.artsy.net')
+    const client = new SimpleQL('https://metaphysics-production.artsy.net/v2')
 
     const query = await client.query({
       query: gql`
@@ -54,7 +54,7 @@ describe('SimpleQL', () => {
   })
 
   it('should return correctly datatree with gql query and in get', async () => {
-    const client = new SimpleQL('https://metaphysics-production.artsy.net', {
+    const client = new SimpleQL('https://metaphysics-production.artsy.net/v2', {
       method: 'get',
     })
 
